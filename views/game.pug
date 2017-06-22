@@ -12,6 +12,7 @@ html
     link(rel='stylesheet', href='/css/login.css')
     link(rel='stylesheet', href='/css/character.css')
     link(rel='stylesheet', href='/css/matchmaking.css')
+    link(rel='stylesheet', href='/css/game.css')
 
     link(href='https://fonts.googleapis.com/css?family=Holtwood+One+SC', rel='stylesheet')
     link(href='https://fonts.googleapis.com/css?family=Alfa+Slab+One', rel='stylesheet', type='text/css')
@@ -23,15 +24,25 @@ html
     .container
       include partials/flash
       block content
+        #ready.col-md-12
+          a.btn.btn-default Ready 
+        #joinGame.col-md-12
+          a.btn.btn-default Join game
+        #createRoom.col-md-12
+          a.btn.btn-default Create a room
+            
 
     //include partials/footer
-
+    script(src='/socket.io/socket.io.js')
     script(src='/js/lib/jquery-3.1.1.min.js')
     script(src='/js/lib/bootstrap.min.js')
     script(src='/js/main.js')
-    script(src='/socket.io/socket.io.js')
     script(src='/js/phaser.js')
     script(src='/js/gameFront/game.js')
+
+   
+
+
 
     // Google Analytics: change UA-XXXXX-X to be your site's ID
     script.

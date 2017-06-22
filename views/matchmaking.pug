@@ -1,0 +1,39 @@
+extends layout
+
+block content
+
+  .row
+
+
+    #userView.col-md-9
+      .statsHeader
+        .col-md-12
+          p.matchLogo Matchmaking
+        #userList.col-md-12
+
+        .col-md-12
+          a.btn.btn-default(href='/game') Go to game 
+
+        #createRoom.col-md-12
+          a.btn.btn-default Create a room
+         
+   
+    #chat.col-md-3
+
+        .panel.panel-primary
+          #accordion.panel-heading
+            span.glyphicon.glyphicon-comment
+            |  Chat
+            .btn-group.pull-right
+              a.btn.btn-default.btn-xs(type='button', data-toggle='collapse', data-parent='#accordion', href='#collapseOne')
+                span.glyphicon.glyphicon-chevron-down
+          #collapseOne.panel-collapse.collapse
+            .panel-body
+              #messageBox.ul.chat
+               
+            .panel-footer
+              .input-group
+                input#btn-input.form-control.input-sm(type='text', placeholder='Type your message here...')
+                span.input-group-btn
+                  button#btn-chat.btn.btn-warning.btn-sm
+                    | Send

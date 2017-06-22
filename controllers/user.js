@@ -4,17 +4,45 @@ const nodemailer = require('nodemailer');
 const passport = require('passport');
 const User = require('../models/User');
 
-/**
- * GET /login
- * Login page.
- */
-exports.getLogin = (req, res) => {
-  if (req.user) {
-    return res.redirect('/');
-  }
-  res.render('account/login', {
-    title: 'Login'
+
+var http = require('http');
+var MongoClient = require('mongodb').MongoClient;
+var url = "mongodb://localhost/navalWar";
+
+exports.matchLost = (data) => {
+
+  //console.log(data);
+  /*
+  User.findOne({_id: data._id}, function(err, user) {
+     user.username = "test";
+     console.log(user);
+  });*/
+/*
+  User.findOneAndUpdate(
+  { _id: data._id },
+  { $setOnInsert: { username: "test" } },
+  { new: true, upsert: true }
+
+  );
+*/
+/*
+var test = collection.find({});
+console.log(test);
+
+  User.findById(data._id, (err, user) => {
+    user.matchesLost = "100";
+    console.log(user);
   });
+*/
+
+  MongoClient.connect(url, function(err, db) {
+    var query = { _id: data._id };
+    var newMatchLost = parseInt(data.matchesLost) + 1;
+    db.collection("users").updateOne(query, { $set: { matchesLost: newMatchLost } }, function(err, res) {
+      console.log("Match updated");
+      db.close();
+  });
+});
 };
 
 /**
@@ -30,19 +58,19 @@ exports.postLogin = (req, res, next) => {
 
   if (errors) {
     req.flash('errors', errors);
-    return res.redirect('/login');
+    return res.redirect('/');
   }
 
   passport.authenticate('local', (err, user, info) => {
     if (err) { return next(err); }
     if (!user) {
       req.flash('errors', info);
-      return res.redirect('/login');
+      return res.redirect('/');
     }
     req.logIn(user, (err) => {
       if (err) { return next(err); }
       req.flash('success', { msg: 'Success! You are logged in.' });
-      res.redirect(req.session.returnTo || '/');
+      res.redirect('characterPage');
     });
   })(req, res, next);
 };
@@ -62,7 +90,7 @@ exports.logout = (req, res) => {
  */
 exports.getSignup = (req, res) => {
   if (req.user) {
-    return res.redirect('/');
+    return res.redirect('characterPage');
   }
   res.render('account/signup', {
     title: 'Create Account'
@@ -87,9 +115,15 @@ exports.postSignup = (req, res, next) => {
   }
 
   const user = new User({
+    username: req.body.name,
     email: req.body.email,
-    password: req.body.password
+    password: req.body.password,
+    matchesWon: 0,
+    matchesLost: 0,
+    playersKilled: 0,
   });
+
+  console.log(req.body);
 
   User.findOne({ email: req.body.email }, (err, existingUser) => {
     if (err) { return next(err); }
@@ -103,7 +137,7 @@ exports.postSignup = (req, res, next) => {
         if (err) {
           return next(err);
         }
-        res.redirect('/');
+        res.redirect('characterPage');
       });
     });
   });
@@ -113,11 +147,39 @@ exports.postSignup = (req, res, next) => {
  * GET /account
  * Profile page.
  */
-exports.getAccount = (req, res) => {
-  res.render('account/profile', {
-    title: 'Account Management'
-  });
+
+exports.getCharacter = (req, res) => {
+  if (!req.user) {
+    res.redirect('/');
+  }else{
+    res.render('characterPage', {
+      statsWon: req.user.matchesWon,
+      statsLost: req.user.matchesLost,
+      playersKilled: req.user.playersKilled,
+      userName: req.user.username
+    });
+  }
 };
+
+exports.getMatchmaking = (req, res) => {
+  if (!req.user) {
+    res.redirect('/');
+  }else{
+    res.render('matchmaking', {
+      characterID: req.user.matchesWon
+    });
+  }
+};
+
+exports.getGame = (req, res) => {
+  if (!req.user) {
+    res.redirect('/');
+  }else{
+    res.render('game', {
+    });
+  }
+};
+
 
 /**
  * POST /account/profile
@@ -240,7 +302,7 @@ exports.getReset = (req, res, next) => {
  * Process the reset password request.
  */
 exports.postReset = (req, res, next) => {
-  req.assert('password', 'Password must be at least 4 characters long.').len(4);
+  req.assert('password', 'Password must be at least 8 characters long.').len(8);
   req.assert('confirm', 'Passwords must match.').equals(req.body.password);
 
   const errors = req.validationErrors();

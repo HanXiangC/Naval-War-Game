@@ -1,0 +1,159 @@
+extends layout
+
+block content
+
+  #characterElements.row
+    #template.row
+      #statColumn.col-md-3
+        .statsHeader
+          .col-md-12
+            p.mainStatHeader Player Stats
+
+        .statsRow
+          .col-md-12
+            p.statHeader Matches Won
+            .stat= statsWon
+
+        .statsRow
+          .col-md-12
+            p.statHeader Matches Lost
+            .stat= statsLost
+
+        .statsRow
+          .col-md-12
+            p.statHeader Players Killed
+            .stat= playersKilled
+
+      #characterView.col-md-6
+        .statsHeader
+          .col-md-12
+            p.mainStatHeader Lobby
+          #lobbyList.col-md-12
+          #gameInvite.col-md-12
+
+      #socialProfile.col-md-3
+        .statsHeader
+          .col-md-12
+             if user.profile.picture
+               img(src=user.profile.picture)
+             else
+               img(src=user.gravatar(60))   
+          #profileColumn.col-md-12
+            p.infoHeader Name 
+            p.name= userName
+
+          #chat.col-md-12
+            .panel.panel-primary
+              #accordion.panel-heading
+                span.glyphicon.glyphicon-comment
+                |  Chat
+                .btn-group.pull-right
+                  a.btn.btn-default.btn-xs(type='button', data-toggle='collapse', data-parent='#accordion', href='#collapseOne')
+                    span.glyphicon.glyphicon-chevron-down
+              #collapseOne.panel-collapse.collapse
+                .panel-body
+                  #messageBox.ul.chat
+                       
+                .panel-footer
+                  .input-group
+                    input#btn-input.form-control.input-sm(type='text', placeholder='Type your message here...')
+                    span.input-group-btn
+                      button#btn-chat.btn.btn-warning.btn-sm
+                        | Send
+
+          #options.col-md-12
+            a.btn.btn-default(href='matchmaking', role='submit') Matchmaking
+          #options.col-md-12
+            a.btn.btn-default(href='/logout', role='submit') Logout 
+
+  script#playerNameTemplate(type='text/template').
+      <div class="playerName">
+        <div class="col-md-5 playerUsername">{{userName}}</div>
+        <div class="col-md-2 rank">{{rank}}</div>
+        <button type="button" class="btn btn-info invite" >Invite</button>
+      </div>
+
+  script#gameInviteTemplate(type='text/template').
+      <div class="invitation">
+        <div class="col-md-5 playerUsername">{{userName}} has invited you to a match</div>
+        <button type="button" class="btn btn-info" id="accept" >Accept</button>
+        <button type="button" class="btn btn-info" id="decline">Decline</button>
+      </div>
+
+  script#gameScreenTemplate(type='text/template').
+      <button type="button" class="btn btn-info" id="ready">Ready</button>
+      <button type="button" class="btn btn-info" id="quit">Quit Game</button>
+
+  script#pageTemplate(type='text/template').
+    <div id="template" class="row">
+      <div id="statColumn" class="col-md-3">
+        <div class="statsHeader">
+          <div class="col-md-12">
+            <p class="mainStatHeader">Player Stats</p>
+          </div>
+        </div>
+        <div class="statsRow">
+          <div class="col-md-12">
+            <p class="statHeader">Matches Won</p>
+            <div class="stat"></div>
+          </div>
+        </div>
+        <div class="statsRow">
+          <div class="col-md-12">
+            <p class="statHeader">Matches Lost</p>
+            <div class="stat"></div>
+          </div>
+        </div>
+        <div class="statsRow">
+          <div class="col-md-12">
+            <p class="statHeader">Players Killed</p>
+            <div class="stat"></div>
+          </div>
+        </div>
+      </div>
+      <div id="characterView" class="col-md-6">
+        <div class="statsHeader">
+          <div class="col-md-12">
+            <p class="mainStatHeader">Lobby</p>
+          </div>
+          <div id="lobbyList" class="col-md-12"></div>
+          <div id="gameInvite" class="col-md-12"></div>
+        </div>
+      </div>
+      <div id="socialProfile" class="col-md-3">
+        <div class="statsHeader">
+          <div class="col-md-12">
+               if user.profile.picture
+                 img(src=user.profile.picture)
+               else
+                 img(src=user.gravatar(60))  
+          </div>
+          <div id="profileColumn" class="col-md-12">
+            <p class="infoHeader">Name </p>
+            <p class="name"></p>
+          </div>
+          <div id="chat" class="col-md-12">
+            <div class="panel panel-primary">
+              <div id="accordion" class="panel-heading"><span class="glyphicon glyphicon-comment"></span> Chat
+                <div class="btn-group pull-right"><a type="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-chevron-down"></span></a></div>
+              </div>
+              <div id="collapseOne" class="panel-collapse collapse">
+                <div class="panel-body">
+                  <div id="messageBox" class="ul chat"></div>
+                </div>
+                <div class="panel-footer">
+                  <div class="input-group">
+                    <input id="btn-input" type="text" placeholder="Type your message here..." class="form-control input-sm"/><span class="input-group-btn">
+                      <button id="btn-chat" class="btn btn-warning btn-sm">Send</button></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="options" class="col-md-12"><a href="matchmaking" role="submit" class="btn btn-default">Matchmaking</a></div>
+          <div id="options" class="col-md-12"><a href="/logout" role="submit" class="btn btn-default">Logout </a></div>
+        </div>
+      </div>
+    </div>
+    
+      

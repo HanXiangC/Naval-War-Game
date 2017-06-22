@@ -1,0 +1,105 @@
+.mainStatHeader{
+	font-size:40px;
+	font-family: 'Holtwood One SC', serif;
+	color: white;
+	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+	text-align: center;
+}
+
+.statHeader{
+	font-size:20px;
+	font-family: 'Holtwood One SC', serif;
+	color: white;
+	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+	text-align: center;
+}
+
+.stat {
+	font-size:30px;
+	font-family: 'Holtwood One SC', serif;
+	color: lightgrey;
+	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+	text-align: center;
+}
+
+
+#lobbyList {
+	margin: auto;
+	width: 95%;
+	height: 300px;
+	border: 5px solid #FFFFFF;
+	padding-top: 2%;
+	padding-bottom: 2%;
+}
+
+#gameInvite {
+	margin: auto;
+	width: 95%;
+	height: 300px;
+	border: 5px solid #FFFFFF;
+	padding-top: 2%;
+	padding-bottom: 2%;
+}
+
+.invitation {
+	margin: auto;
+	width: 95%;
+	height: 80%;
+	border: 5px solid #FFFFFF;
+	padding-top: 2%;
+	padding-bottom: 2%;
+}
+.playerName {
+	margin: auto;
+	width: 95%;
+	height: 15%;
+	border: 3px solid #000;
+}
+
+.playerName .playerUsername {
+ 	font-size:15px;
+	font-family: 'Holtwood One SC', serif;
+	color: white;
+	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+.playerName .rank {
+ 	font-size:10px;
+	font-family: 'Holtwood One SC', serif;
+	color: white;
+	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+.playerName .invite {
+ 	font-size:10px;
+	font-family: 'Holtwood One SC', serif;
+	color: white;
+	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+
+	float: right;
+	margin-right: 5%;
+}
+
+
+
+#options {
+
+  margin-top:20px;
+
+
+}
+
+.infoHeader{
+	margin-top: 10px;
+	font-size:20px;
+	font-family: 'Holtwood One SC', serif;
+	color: white;
+	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+.name{
+    font-size:20px;
+	font-family: 'Holtwood One SC', serif;
+	color: lightgrey;
+	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}

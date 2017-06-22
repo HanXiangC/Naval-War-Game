@@ -1,9 +1,18 @@
+const User = require('../models/User');
+
 /**
  * GET /
  * Home page.
  */
-exports.index = (req, res) => {
-  res.render('home', {
-    title: 'Home'
-  });
+exports.loginPage = (req, res) => {
+
+  if (req.user) {
+    return res.redirect('characterPage');
+  }else{
+  	res.render('loginPage', {
+    	title: 'Behemoths - Login'
+ 	 });
+  };
 };
+
+
