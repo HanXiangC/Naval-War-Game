@@ -3,10 +3,13 @@
 var connectionList = {};
 var userIDList = [];
 var rooms = 1;
+var readyCheck = 0;
 
 const express = require('express');
 const app = express();
 const userController = require('../controllers/user');
+
+var rounds = 0;
 
 module.exports = (io) => {
 
@@ -15,39 +18,71 @@ module.exports = (io) => {
 
 /* User connection operations */
 
-    var client = {
-      socketID: socket.id,
-      userID: socket.request.user._id,
-      userDetails: socket.request.user
+
+  if(socket.request.user._id != undefined){
+      var client = {
+        socketID: socket.id,
+        userID: socket.request.user._id,
+        userDetails: socket.request.user
+      }
+      console.log(socket.request.user._id);
+      if(connectionList[socket.request.user._id] == undefined && socket.request.user._id != null){
+        userIDList.push(socket.request.user._id);
+      }
+
+      connectionList[socket.request.user._id] = client;
+
+      var clientDetails = {
+        clientIDs: userIDList,
+        clientList: connectionList
+      }
+
+      io.emit('newUserConnected', clientDetails);
+
     }
 
-    var userID = socket.request.user._id;
 
-    if(connectionList[userID] == undefined){
-      userIDList.push(userID);
-    }
-
-    connectionList[userID] = client;
-
-    var clientDetails = {
-      clientIDs: userIDList,
-      clientList: connectionList
-    }
-
-    io.emit('newUserConnected', clientDetails);
 
 /* User disconnection operations */
 
-  socket.on('client disconnect', () => {
-    console.log("refreshed");
+
+  socket.on('disconnect', () => {
+
+    if(socket.request.user._id != undefined){
+
+      var userID = socket.request.user._id;
+      connectionList[userID] = undefined;
+
+      for(var i = 0; i < userIDList.length; i++){
+        var replacement = {};
+        var replacementID = [];
+        if(connectionList[userIDList[i]] != undefined){
+          replacement[userIDList[i]] = connectionList[userIDList[i]];
+          replacementID.push(userIDList[i]);
+        }
+      }
+
+      connectionList = replacement;
+      userIDList = replacementID;
+
+      var clientDetails = {
+        clientIDs: userIDList,
+        clientList: connectionList
+      }
+      io.emit('newUserConnected', clientDetails);
+    }
   });
+
 
 /* User matchmaking operations */
 
+
     socket.on('send invite', (data) => {
 
-      io.to(connectionList[data].socketID).emit('receive invite', socket.request.user._id);
-      io.to(connectionList[socket.request.user._id].socketID).emit('sent invite', data);
+      if(data != socket.request.user._id){
+        io.to(connectionList[data].socketID).emit('receive invite', socket.request.user._id);
+        io.to(connectionList[socket.request.user._id].socketID).emit('sent invite', data);
+      }
 
     });
 
@@ -60,6 +95,16 @@ module.exports = (io) => {
 
       io.to(connectionList[data].socketID).emit('start game', gamePackage);
       io.to(connectionList[socket.request.user._id].socketID).emit('start game', gamePackage);
+
+    });
+
+    socket.on('revert', (data) => {
+      io.to(connectionList[data].socketID).emit('revert invite', socket.request.user._id);
+    });
+
+    socket.on('origin invite', (data) => {
+
+       console.log(data);
 
     });
 
@@ -83,6 +128,8 @@ module.exports = (io) => {
       userController.matchLost(socket.request.user);
       io.in("Room " + rooms).emit('reload');
     });
+
+
 /* User gane control operations */
 
     socket.on('keyCode', (data) => {

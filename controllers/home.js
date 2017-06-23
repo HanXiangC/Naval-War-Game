@@ -10,7 +10,7 @@ exports.loginPage = (req, res) => {
     return res.redirect('characterPage');
   }else{
   	res.render('loginPage', {
-    	title: 'Behemoths - Login'
+    	title: 'Game Template - Login'
  	 });
   };
 };

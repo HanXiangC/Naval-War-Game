@@ -15,7 +15,8 @@ $(document).ready(function() {
 
 
   socket.on('newUserConnected', function (data) {
-      processData(data);
+    console.log(data);
+    processData(data);
 
     $('#lobbyList').empty();
 
@@ -23,7 +24,7 @@ $(document).ready(function() {
 
         var tpl = $('#playerNameTemplate').html();
         tpl = tpl.replace('{{userName}}', userObject[userIDs[i]].userDetails.username);
-        tpl = tpl.replace('{{rank}}', 'Seventh Kyu');
+        tpl = tpl.replace('{{rank}}', 'Rank');
 
         $('#lobbyList').append(tpl);
 
@@ -46,6 +47,7 @@ $(document).ready(function() {
   });
 
 
+
   socket.on('sent invite', function (data) {
     $('#' + data + " button").text("Invite Sent");
   });
@@ -61,6 +63,16 @@ $(document).ready(function() {
       socket.emit('game accepted', data);
     });
 
+    $('#decline').on('click', function(){
+      $('#gameInvite').empty();
+      socket.emit('revert', userObject[data].userDetails._id);  
+    });
+
+  });
+
+  socket.on('revert invite', function (data) {
+    console.log(data);
+    $('#' + data + " button").text("Invite");
   });
 
   socket.on('start game', function (data) {

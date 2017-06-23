@@ -131,8 +131,6 @@ app.get('/', homeController.loginPage);
 app.post('/', userController.postLogin);
 app.get('/logout', userController.logout);
 app.get('/characterPage', userController.getCharacter);
-app.get('/matchmaking', userController.getMatchmaking);
-app.get('/game', userController.getGame);
 app.get('/forgot', userController.getForgot);
 app.post('/forgot', userController.postForgot);
 app.get('/reset/:token', userController.getReset);

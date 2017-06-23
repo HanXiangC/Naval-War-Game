@@ -161,24 +161,6 @@ exports.getCharacter = (req, res) => {
   }
 };
 
-exports.getMatchmaking = (req, res) => {
-  if (!req.user) {
-    res.redirect('/');
-  }else{
-    res.render('matchmaking', {
-      characterID: req.user.matchesWon
-    });
-  }
-};
-
-exports.getGame = (req, res) => {
-  if (!req.user) {
-    res.redirect('/');
-  }else{
-    res.render('game', {
-    });
-  }
-};
 
 
 /**
